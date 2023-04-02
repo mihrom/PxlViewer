@@ -12,6 +12,8 @@ void PxlPlayback::run(int step_msec)
     timeout_step = step_msec;
     running = true;
     repeats = 0;
+
+    start_time = chrono::steady_clock::now()-chrono::milliseconds(time);
 }
 
 
@@ -23,9 +25,10 @@ void PxlPlayback::stop()
 
 bool PxlPlayback::timerStep()
 {
-    time += timeout_step;
+    auto end_time = chrono::steady_clock::now();
+    time = chrono::duration_cast<chrono::milliseconds>(end_time - start_time).count();
 
-    uint next_frame = curent_frame_number;
+    uint next_frame = 0;
 
     while(next_frame < count_frames && time >= frames_times[next_frame+1])
         ++next_frame;
@@ -33,6 +36,7 @@ bool PxlPlayback::timerStep()
     if(next_frame >= count_frames){
         next_frame = 0;
         time = 0;
+        start_time = chrono::steady_clock::now();
         repeats++;
     }
 
@@ -75,12 +79,12 @@ bool PxlPlayback::jumpToFrame(uint16_t frame_number)
         return false;
 
     curent_frame_number = frame_number;
-    time = frames_times[curent_frame_number];
+    time = frames_times[curent_frame_number+1];
     return true;
 }
 
 
-void PxlPlayback::setFramesTimeouts(std::vector<uint16_t> timeouts)
+void PxlPlayback::setFramesTimeouts(vector<uint16_t> timeouts)
 {
     curent_frame_number = 0;
     time = 0;
@@ -88,6 +92,7 @@ void PxlPlayback::setFramesTimeouts(std::vector<uint16_t> timeouts)
     frames_timeouts = timeouts;
     count_frames = frames_timeouts.size();
 
+    frames_times.clear();
     uint16_t counter {0};
     for(auto t: frames_timeouts) {
         frames_times.push_back(counter);

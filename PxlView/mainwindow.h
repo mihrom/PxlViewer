@@ -48,7 +48,7 @@ private slots:
 
     void on_checkBox_black_stateChanged(int is_black);
     void on_horizontalSlider_size_valueChanged(int size);
-    void on_horizontalSlider_timeline_valueChanged(int frame_number);
+    void on_horizontalSlider_timeline_actionTriggered(int);
 
     void on_playButton_clicked();
     void on_prevButton_clicked();

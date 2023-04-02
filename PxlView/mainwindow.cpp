@@ -198,12 +198,10 @@ void MainWindow::on_horizontalSlider_size_valueChanged(int size)
 }
 
 
-void MainWindow::on_horizontalSlider_timeline_valueChanged(int frame_number)
+void MainWindow::on_horizontalSlider_timeline_actionTriggered(int)
 {   
-    if(playback.getCurrentFrameNumber() != frame_number){
-        playback.jumpToFrame(frame_number);
-        writePxl();
-    }
+    playback.jumpToFrame(ui->horizontalSlider_timeline->value());
+    writePxl();
 }
 
 

@@ -2,13 +2,17 @@
 #define PXLPLAYBACK_H
 
 #include <vector>
+#include <chrono>
 
 #include "pxlfile.h"
 
+using namespace std;
+
+
 class PxlPlayback
 {
-    std::vector<uint16_t> frames_timeouts;
-    std::vector<uint16_t> frames_times;
+    vector<uint16_t> frames_timeouts;
+    vector<uint16_t> frames_times;
     uint count_frames { 0 };
     uint count_of_repeats { 0 };
 
@@ -17,6 +21,7 @@ class PxlPlayback
     bool running { false };
     uint curent_frame_number { 0 };
     uint time { 0 };
+    chrono::steady_clock::time_point start_time {};
     uint repeats { 0 };
 
 public:
@@ -30,7 +35,7 @@ public:
     void next();
     bool jumpToFrame(uint16_t frame_number);
 
-    void setFramesTimeouts(std::vector<uint16_t> timeouts);
+    void setFramesTimeouts(vector<uint16_t> timeouts);
     void setRepeats(uint8_t repeats);
     bool isRunning() const;
     uint16_t getCurrentFrameNumber() const;
